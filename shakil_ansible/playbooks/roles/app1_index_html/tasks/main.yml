@@ -1,0 +1,7 @@
+---
+# tasks file for app1_index_html
+
+  - name: copy static index.html to tomcat webapps/ansible/index.html
+    template:
+      src: index.html.app1
+      dest: /usr/share/tomcat/webapps/ansible/index.html

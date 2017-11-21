@@ -1,0 +1,54 @@
+---
+- name: configuration
+  hosts: all
+  gather_facts: true
+  become: true
+  roles:
+   - baseconfig
+
+- name: haproxy
+  hosts: frontends
+  gather_facts: true #move later! speeds up testing
+  become: true
+  roles:
+  - haproxy
+
+- name: deploy tomcat
+  hosts: frontends
+  gather_facts: true # remove later! speeds up testing
+  become: true
+  roles:
+  - tomcat
+
+- name: index.html on app 1
+  hosts: app1
+  gather_facts: true # remove later! speeds up testing
+  become: true
+  roles:
+  - app1_index_html
+
+- name: index.html on app 1
+  hosts: app2
+  gather_facts: true # remove later! speeds up testing
+  become: true
+  roles:
+  - app2_index_html
+
+- name: deploy apache
+  hosts: apps
+  gather_facts: true # remove later! speeds up testing
+  become: true
+  roles:
+    - apache
+
+- name: postgress install
+  hosts: appdbs
+  gather_facts: true # remove later! speeds up testing
+  become: true
+  roles:
+  - geerlingguy.postgresql
+
+
+  
+ 
+
