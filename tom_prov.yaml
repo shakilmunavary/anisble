@@ -27,6 +27,13 @@
                       count={{count}}
                       vpc_subnet_id=subnet-06d65c23c714b2da4
                       assign_public_ip=yes
+                      count_tag:
+                        Name: "Prov_by_Ansbl"
+                      user_data: |
+                                 #!/bin/sh
+                                 cd /usr/share/tomcat/webapps
+                                 sudo wget http://13.250.14.248:8081/artifactory/list/CapstonePOC/java-tomcat-maven-example.war
+                                 sudo unzip java-tomcat-maven-example.war
         register: ec2
 
       - name: Add the newly created EC2 instance(s) to host group
