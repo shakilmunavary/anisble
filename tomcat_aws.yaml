@@ -35,7 +35,7 @@
         register: ec2
 
       - name: Add the newly created EC2 instance(s) to host group
-        lineinfile: dest=/opt/ansible/env_prov/inventory/hosts
+        lineinfile: dest=/opt/ansible/envpov/inventory/hosts
               regexp={{ item.public_ip }}
               insertafter="[app_server]"
               line="{{ item.public_ip }}"
@@ -54,4 +54,4 @@
         with_items: "{{ ec2.instances }}"
         args:
           tags:
-            Name: webserver
+            Name: Ansible_Powered_Tomcat
