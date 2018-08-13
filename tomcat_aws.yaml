@@ -5,11 +5,12 @@
     gather_facts: False
     become: true
     tags: provisioning
-    # Necessary Variables for creating/provisioning the EC2 Instance
+    # Run like below
+    # ansible-playbook -i /opt/ansible/envpov/inventory/hosts tomcat_aws.yaml -e Machine_Name="Ansble_Pwrd_Tomcat"ng/provisioning the EC2 Instance
     vars:
       instance_type: t2.medium
       security_group: wiproSG # Change the security group name here
-      image: ami-0ae53a3df23436b1b  # This is an AMI i created myself
+      image: ami-004e5742ec289346d  # This is an AMI i created myself
       keypair: wipro_devops # This is one of my keys that i already have in AWS
       region: ap-southeast-1 # Change the Region
       count: 1
