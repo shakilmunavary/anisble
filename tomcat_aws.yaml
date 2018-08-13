@@ -54,4 +54,4 @@
         with_items: '{{ ec2.instances }}'
         args:
           tags:
-            Name: webserver
+            Name: '{{ Machine_Name }}'
