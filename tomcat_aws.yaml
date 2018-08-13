@@ -6,7 +6,9 @@
     become: true
     tags: provisioning
     # Run like below
-    # ansible-playbook -i /opt/ansible/envpov/inventory/hosts tomcat_aws.yaml -e Machine_Name="Ansble_Pwrd_Tomcat"ng/provisioning the EC2 Instance
+    # ansible-playbook -i /opt/ansible/envpov/inventory/hosts tomcat_aws.yaml -e Machine_Name="Ansble_Pwrd_Tomcat"
+    # aws_ac_key="" aws_sec_key="" ec_url=""
+    
     vars:
       instance_type: t2.medium
       security_group: wiproSG # Change the security group name here
@@ -20,6 +22,9 @@
 
       - name: Launch the new EC2 Instance
         ec2: 
+          ec2_url: "{{ ec_url }}"
+          aws_access_key: "{{ aws_ac_key }}"
+          aws_secret_key: "{{ aws_sec_key }}"
           group_id: sg-035b3a5ae6ba40cb0
           instance_type: "{{ instance_type}}"
           image: "{{ image }}"
