@@ -24,7 +24,7 @@
           wait: true
           region: "{{ region }}"
           keypair: "{{ keypair }}"
-          count: {{count}}
+          count: "{{count}}"
           vpc_subnet_id: subnet-06d65c23c714b2da4
           assign_public_ip: yes
           user_data: |
