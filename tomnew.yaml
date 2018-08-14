@@ -9,7 +9,7 @@
     vars:
       instance_type: t2.medium
       security_group: wiproSG # Change the security group name here
-      image: ami-0ae53a3df23436b1b  # This is an AMI i created myself
+      image: ami-07f0c9caec5449629  # This is an AMI i created myself
       keypair: wipro_devops # This is one of my keys that i already have in AWS
       region: ap-southeast-1 # Change the Region
       count: 1
