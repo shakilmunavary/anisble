@@ -1,0 +1,66 @@
+---
+  - name: Provision an EC2 Instance
+    hosts: localhost
+    connection: local
+    gather_facts: False
+    become: true
+    tags: provisioning
+    # Necessary Variables for creating/provisioning the EC2 Instance
+    vars:
+      instance_type: t2.medium
+      security_group: wiproSG # Change the security group name here
+      image: ami-07f0c9caec5449629  # This is an AMI i created myself
+      keypair: wipro_devops # This is one of my keys that i already have in AWS
+      region: ap-southeast-1 # Change the Region
+      count: 1
+      Machine_Name: "{{ Machine_Name }}"
+      # Task that will be used to Launch/Create an EC2 Instance
+    tasks:
+
+      - name: Launch the new EC2 Instance
+        ec2: 
+          ec2_url: "{{ ec_url }}"
+          aws_access_key: "{{ aws_ac_key }}"
+          aws_secret_key: "{{ aws_sec_key }}"
+          group_id: sg-035b3a5ae6ba40cb0
+          instance_type: "{{ instance_type}}"
+          image: "{{ image }}"
+          wait: true
+          region: "{{ region }}"
+          keypair: "{{ keypair }}"
+          count: "{{count}}"
+          vpc_subnet_id: subnet-06d65c23c714b2da4
+          assign_public_ip: yes
+          user_data: |
+                 #!/bin/sh
+                 sudo cd /usr/share/tomcat/webapps
+                 sudo wget http://13.250.14.248:8081/artifactory/list/CapstonePOC/java-tomcat-maven-example.war
+                 sudo unzip java-tomcat-maven-example.war
+        register: ec2
+
+      - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
+        local_action: lineinfile 
+                      dest="/opt/ansible/envpov/inventory/hosts" 
+                      regexp={{ item.public_ip }} 
+                      insertafter="[webserver]" line={{ item.public_ip }}
+        with_items: '{{ ec2.instances }}'
+
+      - name: Wait for SSH to come up
+        local_action: wait_for 
+                      host={{ item.public_ip }} 
+                      port=22 
+                      state=started
+        with_items: '{{ ec2.instances }}'
+
+      - name: Add tag to Instance(s)
+        ec2_tag: 
+           resource={{ item.id }} 
+           region={{ region }} 
+           state=present 
+           aws_access_key= {{ aws_ac_key }}
+           aws_secret_key= {{ aws_sec_key }}
+           ec2_url= {{ ec_url }}
+        with_items: '{{ ec2.instances }}'
+        args:
+          tags:
+            Name: '{{ Machine_Name }}'
